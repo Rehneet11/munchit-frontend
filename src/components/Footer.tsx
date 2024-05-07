@@ -1,5 +1,7 @@
 import logomain from "../assets/logomain.jpg"
+import { Link } from "react-router-dom";
 const Footer=()=>{
+    
     return(
         <div className="bg-slate-900 py-10">
         <div className="container mx-auto flex flex-col md:flex-row justify-between items-center">
@@ -12,8 +14,15 @@ const Footer=()=>{
             </div> 
             </span>
             <span className=" text-white font-bold tracking-tight flex gap-4" >
+            <Link to="/coming-soon">
                 <span>Privacy Policy </span>
-                <span>Terms And Conditions</span>
+                
+            </Link>
+            <Link to="/coming-soon">
+                <span>Terms and Conditions </span>
+                
+            </Link>
+                
             </span>
         </div>
     </div>

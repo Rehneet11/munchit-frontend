@@ -7,6 +7,8 @@ import ProtectedRoute from "./auth/ProtectedRoute";
 import ManageRestaurantPage from "./pages/ManageRestaurantPage";
 import SearchPage from "./pages/SearchPage";
 import DetailPage from "./pages/DetailPage";
+import ComingSoon from "./pages/ComingSoon";
+import OrderStatusPage from "./pages/MyOrdersPage";
 
 const AppRoutes = ()=>{
     return(
@@ -16,12 +18,15 @@ const AppRoutes = ()=>{
             <Route path="/search/:city" element={<Layout showHero={false}>
                 <SearchPage/>
             </Layout>}/>
+            <Route path="/coming-soon" element={<ComingSoon/>}/>
+
             <Route path="/detail/:restaurantId" element={<Layout showHero={false}>
                 <DetailPage/>
             </Layout>}/>
             <Route element={<ProtectedRoute/>}>
             <Route path="/user-profile" element={<Layout><UserProfilePage/></Layout>}/>
             <Route path="/manage-restaurant" element={<Layout><ManageRestaurantPage/></Layout>}/>
+            <Route path="/order-status" element={<Layout><OrderStatusPage/></Layout>}/>
             </Route>
             <Route path="*" element={<Navigate to ="/"/>}/>
         </Routes>
