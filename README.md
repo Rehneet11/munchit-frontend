@@ -1,30 +1,56 @@
-# React + TypeScript + Vite
+# MunchIt Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Welcome to the frontend repository of MunchIt, the cutting-edge food ordering platform that's changing the way you enjoy your favorite meals! 🍔🥗🌮
 
-Currently, two official plugins are available:
+## About MunchIt
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+MunchIt is a full-stack food ordering web app and mobile app built with the powerful MERN stack (MongoDB, Express.js, React.js, Node.js), enhanced with TypeScript for security and code clarity, and styled with Tailwind CSS for beautiful and responsive design. The frontend part of MunchIt is responsible for delivering a delightful user experience for both foodies and restaurant owners alike.
 
-## Expanding the ESLint configuration
+## Features
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+- Effortless Food Ordering: Search, sort, and filter through a vast selection of restaurants to find your perfect meal. Manage your cart with ease, add or remove items on the go, and track your order history for quick reordering.
+  
+- Empowering Restaurants: Restaurant owners can create and manage their profiles, showcase mouthwatering descriptions and tempting photos, manage menus, and track order statuses effortlessly.
 
-- Configure the top-level `parserOptions` property like this:
+- Secure and Scalable Infrastructure: Secure user authentication handled by Auth0 ensures data safety, while Stripe integration provides smooth in-app payment experience. Deployment on Render.com guarantees scalability to handle any crowd size.
 
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
-```
+## Getting Started
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+1. **Clone the Repository**: 
+git clone https://github.com/yourusername/munchit-frontend.git
+
+
+2. **Install Dependencies**: 
+cd munchit-frontend
+npm install
+
+
+3. **Set Up Environment Variables**: 
+Create a `.env` file in the root directory and add the necessary environment variables. Example
+- VITE_API_BASE_URL=your-backend-base-url  
+- VITE_AUTH0_AUDIENCE=audience-name in auth0  
+- VITE_AUTH0_DOMAIN=your-auth0-domain.auth0.com  
+- VITE_AUTH0_CLIENT_ID=your-auth0-client-id  
+- VITE_AUTH0_CALLBACK_URL=your-callback-url-onauth0
+
+
+4. **Start the Development Server**: 
+npm run dev
+
+
+## Technologies Used
+
+- React.js
+- TypeScript
+- Tailwind CSS
+
+## Contributing
+
+We welcome contributions from everyone! To contribute to MunchIt, please follow these steps:
+
+1. Fork the repository.
+2. Create your feature branch (`git checkout -b feature/YourFeature`).
+3. Commit your changes (`git commit -m 'Add some feature'`).
+4. Push to the branch (`git push origin feature/YourFeature`).
+5. Open a pull request.
+
