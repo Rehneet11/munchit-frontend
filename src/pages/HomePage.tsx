@@ -18,7 +18,8 @@ const HomePage = () => {
           Delivery at your Doorstep in Minutes
         </h1>
         <span className="text-xl text-slate-600">Order Now For Best Deals</span>
-        <SearchBar placeHolder="Search by city " onSubmit={handleSearchSubmit} />
+        <span className="text-xl text-slate-600">For Sample data search by cities like Mumbai or Delhi or You can also add your city in Manage Restaurants tab</span>
+        <SearchBar placeHolder="Search by city  " onSubmit={handleSearchSubmit} />
       </div>
 
       <div className="bg-white p-10 rounded-lg">
