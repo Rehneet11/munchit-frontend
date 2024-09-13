@@ -8,7 +8,7 @@ import { SearchForm } from "@/components/SearchBar";
 import PaginationSelector from "@/components/PaginationSelector";
 import CuisineFilter from "@/components/CuisineFilter";
 import SortOptionDropdown from "@/components/SortOptionDropdown";
-import debounce from "lodash.debounce";  // Import debounce
+import debounce from "debounce";  // Import debounce
 
 export type SearchState = {
   searchQuery: string;
@@ -128,3 +128,4 @@ const SearchPage = () => {
 };
 
 export default SearchPage;
+
