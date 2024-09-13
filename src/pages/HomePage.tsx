@@ -2,6 +2,7 @@ import { Link, useNavigate } from "react-router-dom";
 import SearchBar, { SearchForm } from "@/components/SearchBar";
 import Appimg2 from "../assets/Appimg2.jpeg";
 import Appdownloadimg from "../assets/Appdownloadimg.png";
+import Carousel from "@/components/Carousel";
 
 const HomePage = () => {
   const navigate = useNavigate();
@@ -21,7 +22,7 @@ const HomePage = () => {
         <span className="text-xl text-slate-600">For Sample data search by cities like Mumbai or Delhi or You can also add your city in Manage Restaurants tab</span>
         <SearchBar placeHolder="Search by city  " onSubmit={handleSearchSubmit} />
       </div>
-
+      <Carousel/>
       <div className="bg-white p-10 rounded-lg">
         <div className="grid md:grid-cols-2 gap-5">
           <img
