@@ -91,7 +91,7 @@ export const useSearchRestaurants = (
     ["searchRestaurants", searchState, city], // Include city and searchState in the cache key
     createSearchRequest,
     {
-      enabled: !!city && (searchState.searchQuery || searchState.selectedCuisines.length > 0), // Only fetch when there is a query
+      enabled: Boolean(city) && (searchState.searchQuery || searchState.selectedCuisines.length > 0), // Only fetch when there is a query
       staleTime: 10 * 60 * 1000, // Cache results for 10 minutes
       retry: 1, // Retry once before throwing error
       refetchOnWindowFocus: false, // Avoid refetching on window focus
