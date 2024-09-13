@@ -46,7 +46,7 @@ const Carousel = () => {
   };
 
   return (
-    <div className="carousel-container mx-auto max-w-2xl p-8 text-center bg-gradient-to-r from-blue-500 to-purple-500 shadow-xl rounded-lg relative">
+    <div className="carousel-container mx-auto max-w-3xl p-8 text-center bg-gradient-to-r from-blue-500 to-purple-500 shadow-xl rounded-lg relative">
       <div className="overflow-hidden h-64 flex justify-center items-center">
         <div
           key={activeIndex}
