@@ -10,7 +10,7 @@ const features: Feature[] = [
   {
     title: "Effortless Food Ordering",
     description: "Order your favorite meals from a wide variety of restaurants with just a few clicks.",
-    icon: "🍔", // Replace with actual icons or images
+    icon: "🍔",
   },
   {
     title: "Secure Payment Integration",
@@ -46,36 +46,35 @@ const Carousel = () => {
   };
 
   return (
-    <div className="carousel-container mx-auto max-w-3xl p-8 text-center bg-gradient-to-r from-blue-500 to-purple-500 shadow-xl rounded-lg relative">
-      <div className="overflow-hidden h-64 flex justify-center items-center">
+    <div className="carousel-container mx-auto max-w-full md:max-w-2xl p-4 md:p-8 text-center bg-gradient-to-r from-blue-500 to-purple-500 shadow-xl rounded-lg relative">
+      <div className="overflow-hidden relative">
         <div
-          key={activeIndex}
-          className="transition-transform transform duration-500 ease-in-out"
-          style={{
-            transform: `translateX(-${activeIndex * 100}%)`,
-            display: "flex",
-          }}
+          className="transition-transform transform duration-500 ease-in-out w-full flex"
+          style={{ transform: `translateX(-${activeIndex * 100}%)` }}
         >
           {features.map((feature, index) => (
-            <div key={index} className="w-full flex-shrink-0 flex flex-col items-center">
-              <div className="text-7xl mb-6">{feature.icon}</div>
-              <h2 className="text-4xl font-extrabold text-white">{feature.title}</h2>
-              <p className="text-lg text-white mt-3">{feature.description}</p>
+            <div
+              key={index}
+              className="w-full flex-shrink-0 flex flex-col items-center justify-center p-4 space-y-4 min-h-[300px] md:min-h-[400px]"
+            >
+              <div className="text-6xl">{feature.icon}</div>
+              <h2 className="text-xl md:text-3xl font-extrabold text-white break-words">{feature.title}</h2>
+              <p className="text-sm md:text-lg text-white break-words">{feature.description}</p>
             </div>
           ))}
         </div>
       </div>
 
       {/* Carousel Controls */}
-      <div className="flex justify-between items-center mt-8">
+      <div className="absolute bottom-4 md:bottom-8 left-0 right-0 flex justify-between items-center px-4 md:px-8">
         <button
-          className="bg-white bg-opacity-20 hover:bg-opacity-40 transition-all duration-300 text-white text-2xl font-bold p-4 rounded-full shadow-lg"
+          className="bg-white bg-opacity-30 hover:bg-opacity-50 transition-all duration-300 text-white text-2xl font-bold p-3 md:p-4 rounded-full shadow-lg"
           onClick={prevSlide}
         >
           ◀
         </button>
         <button
-          className="bg-white bg-opacity-20 hover:bg-opacity-40 transition-all duration-300 text-white text-2xl font-bold p-4 rounded-full shadow-lg"
+          className="bg-white bg-opacity-30 hover:bg-opacity-50 transition-all duration-300 text-white text-2xl font-bold p-3 md:p-4 rounded-full shadow-lg"
           onClick={nextSlide}
         >
           ▶
@@ -83,12 +82,12 @@ const Carousel = () => {
       </div>
 
       {/* Carousel Dots */}
-      <div className="flex justify-center mt-6 space-x-3">
+      <div className="flex justify-center mt-4 md:mt-6 space-x-2 md:space-x-3">
         {features.map((_, index) => (
           <span
             key={index}
-            className={`h-3 w-3 rounded-full transition-all duration-300 transform ${
-              index === activeIndex ? "bg-white scale-125" : "bg-white bg-opacity-40"
+            className={`h-2 w-2 md:h-3 md:w-3 rounded-full transition-all duration-300 transform ${
+              index === activeIndex ? "bg-white scale-110" : "bg-white bg-opacity-40"
             }`}
           ></span>
         ))}
@@ -98,3 +97,4 @@ const Carousel = () => {
 };
 
 export default Carousel;
+
