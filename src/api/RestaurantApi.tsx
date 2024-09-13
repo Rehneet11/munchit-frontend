@@ -76,27 +76,26 @@ export const useSearchRestaurants = (
 
   // Use `react-query` to fetch default restaurants on initial page load
   const { data: defaultResults, isLoading: isDefaultLoading, error: defaultError } = useQuery(
-    ["fetchDefaultRestaurants", city],
-    fetchDefaultRestaurants,
-    {
-      enabled: !!city, // Only query if city is available
-      staleTime: 10 * 60 * 1000, // Cache results for 10 minutes
-      retry: 1, // Retry once before throwing error
-      refetchOnWindowFocus: false, // Avoid refetching on window focus
-    }
-  );
+  ["fetchDefaultRestaurants", city],
+  fetchDefaultRestaurants,
+  {
+    enabled: Boolean(city), // Use Boolean() to ensure it's a boolean value
+    staleTime: 10 * 60 * 1000, // Cache results for 10 minutes
+    retry: 1, // Retry once before throwing error
+    refetchOnWindowFocus: false, // Avoid refetching on window focus
+  }
+);
 
-  // Use `react-query` to fetch results based on search query
-  const { data: results, isLoading: isSearchLoading, error: searchError } = useQuery(
-    ["searchRestaurants", searchState, city], // Include city and searchState in the cache key
-    createSearchRequest,
-    {
-      enabled: Boolean(city) && (searchState.searchQuery || searchState.selectedCuisines.length > 0), // Only fetch when there is a query
-      staleTime: 10 * 60 * 1000, // Cache results for 10 minutes
-      retry: 1, // Retry once before throwing error
-      refetchOnWindowFocus: false, // Avoid refetching on window focus
-    }
-  );
+const { data: results, isLoading: isSearchLoading, error: searchError } = useQuery(
+  ["searchRestaurants", searchState, city], // Include city and searchState in the cache key
+  createSearchRequest,
+  {
+    enabled: Boolean(city && (searchState.searchQuery || searchState.selectedCuisines.length > 0)), // Ensure it's boolean
+    staleTime: 10 * 60 * 1000, // Cache results for 10 minutes
+    retry: 1, // Retry once before throwing error
+    refetchOnWindowFocus: false, // Avoid refetching on window focus
+  }
+);
 
   return {
     // Use default results if no search is active
