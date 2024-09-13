@@ -2,108 +2,129 @@ import { useSearchRestaurants } from "@/api/RestaurantApi";
 import SearchBar from "@/components/SearchBar";
 import SearchResultCard from "@/components/SearchResultCard";
 import SearchResultInfo from "@/components/SearchResultInfo";
-import { useState } from "react";
-import { useParams } from "react-router-dom"
+import { useState, useMemo, useCallback } from "react";
+import { useParams } from "react-router-dom";
 import { SearchForm } from "@/components/SearchBar";
 import PaginationSelector from "@/components/PaginationSelector";
 import CuisineFilter from "@/components/CuisineFilter";
 import SortOptionDropdown from "@/components/SortOptionDropdown";
+import debounce from "lodash.debounce";  // Import debounce
 
-export type SearchState={
-    searchQuery:string;
-    page:number;
-    selectedCuisines:string[];
-    sortOption:string;
-}
-const SearchPage=()=>{
-    const {city} = useParams();
-    const [SearchState,setSearchState]= useState<SearchState>({
-        searchQuery:"",
-        page:1,
-        selectedCuisines:[],
-        sortOption:"bestMatch"
-    });
+export type SearchState = {
+  searchQuery: string;
+  page: number;
+  selectedCuisines: string[];
+  sortOption: string;
+};
 
-    const [isExpanded,setIsExpanded] = useState<boolean>(false);
-    const {results,isLoading} = useSearchRestaurants(SearchState,city);
+const SearchPage = () => {
+  const { city } = useParams();
+  const [searchState, setSearchState] = useState<SearchState>({
+    searchQuery: "",
+    page: 1,
+    selectedCuisines: [],
+    sortOption: "bestMatch",
+  });
 
-    const setSortOption = (sortOption:string)=>{
-        setSearchState((prevState)=>({
-            ...prevState,
-            sortOption,
-            page:1,
-        }))
-    }
+  const [isExpanded, setIsExpanded] = useState<boolean>(false);
 
-    const setPage=(page:number)=>{
-        setSearchState((prevState)=>({
-            ...prevState,
-            page,
-        }))
-    }
+  // Memoize API results to avoid refetching on unnecessary re-renders
+  const { results, isLoading } = useSearchRestaurants(searchState, city);
 
-    const setSelectedCuisines=(selectedCuisines:string[])=>{
-        setSearchState((prevState)=>({
-            ...prevState,
-            selectedCuisines,
-            page:1,
-        }))
-    }
+  // Debounce search query to limit API calls while typing
+  const debouncedSetSearchQuery = useCallback(
+    debounce((query: string) => {
+      setSearchState((prevState) => ({
+        ...prevState,
+        searchQuery: query,
+        page: 1,
+      }));
+    }, 300), [] // 300ms delay
+  );
 
-    const setSearchQuery=(searchFormData:SearchForm)=>{
-        setSearchState((prevState)=>({
-            ...prevState,
-            searchQuery:searchFormData.searchQuery,
-            page:1,
-        }));
-    }
+  const setSortOption = useCallback((sortOption: string) => {
+    setSearchState((prevState) => ({
+      ...prevState,
+      sortOption,
+      page: 1,
+    }));
+  }, []);
 
-    const resetSearch=()=>{
-        setSearchState((prevState)=>({
-            ...prevState,
-            searchQuery:"",
-            page:1,
-        }));
-    }
-    
-    if(isLoading){
-        <span>Loading...</span>
-    }
-    if(!results?.data || !city){
-        return <span>No results found 😞</span>
-    }
-    return (
-        <div className="grid grid-cols-1 lg:grid-cols-[250px_1fr] gap-5">
-            <div id="cuisines-List">
-                <CuisineFilter selectedCuisines={SearchState.selectedCuisines}
-                onChange={setSelectedCuisines}
-                isExpanded={isExpanded}
-                onExpandedClick={()=>setIsExpanded((prevIsExpanded)=> !prevIsExpanded)}
-                />
-            </div>
-            <div id="main-content" className="flex flex-col gap-5">
-                <SearchBar 
-                searchQuery={SearchState.searchQuery}
-                onSubmit={setSearchQuery} 
-                placeHolder="Search by cuisine or Restaurant Name"
-                onReset={resetSearch}/>
-                <div className="flex justify-between flex-col gap-3 lg:flex-row ">
-                    <SearchResultInfo total={results.pagination.total} city={city}/>
-                    <SortOptionDropdown sortOption={SearchState.sortOption} 
-                        onChange={(value)=>setSortOption(value)}
-                    />
-                </div>
-                {results.data.map((restaurant)=>(
-                    <SearchResultCard restaurant={restaurant}/>
-                ))}
-                <PaginationSelector 
-                page={results.pagination.page}
-                pages={results.pagination.pages}
-                onPageChange={setPage}
-                />
-            </div>
+  const setPage = useCallback((page: number) => {
+    setSearchState((prevState) => ({
+      ...prevState,
+      page,
+    }));
+  }, []);
+
+  const setSelectedCuisines = useCallback((selectedCuisines: string[]) => {
+    setSearchState((prevState) => ({
+      ...prevState,
+      selectedCuisines,
+      page: 1,
+    }));
+  }, []);
+
+  const setSearchQuery = (searchFormData: SearchForm) => {
+    debouncedSetSearchQuery(searchFormData.searchQuery);
+  };
+
+  const resetSearch = useCallback(() => {
+    setSearchState((prevState) => ({
+      ...prevState,
+      searchQuery: "",
+      page: 1,
+    }));
+  }, []);
+
+  // Memoize the JSX for child components that don't change frequently
+  const cuisineFilterMemo = useMemo(() => (
+    <CuisineFilter
+      selectedCuisines={searchState.selectedCuisines}
+      onChange={setSelectedCuisines}
+      isExpanded={isExpanded}
+      onExpandedClick={() => setIsExpanded((prevIsExpanded) => !prevIsExpanded)}
+    />
+  ), [searchState.selectedCuisines, isExpanded]);
+
+  if (isLoading) {
+    return <span>Loading...</span>;
+  }
+
+  if (!results?.data || !city) {
+    return <span>Loading</span>;
+  }
+
+  return (
+    <div className="grid grid-cols-1 lg:grid-cols-[250px_1fr] gap-5">
+      <div id="cuisines-List">
+        {cuisineFilterMemo}
+      </div>
+      <div id="main-content" className="flex flex-col gap-5">
+        <SearchBar
+          searchQuery={searchState.searchQuery}
+          onSubmit={setSearchQuery}
+          placeHolder="Search by cuisine or Restaurant Name"
+          onReset={resetSearch}
+        />
+        <div className="flex justify-between flex-col gap-3 lg:flex-row">
+          <SearchResultInfo total={results.pagination.total} city={city} />
+          <SortOptionDropdown
+            sortOption={searchState.sortOption}
+            onChange={(value) => setSortOption(value)}
+          />
         </div>
-    )  
-}
+        {results.data.map((restaurant) => (
+          <SearchResultCard key={restaurant.id} restaurant={restaurant} />
+        ))}
+        <PaginationSelector
+          page={results.pagination.page}
+          pages={results.pagination.pages}
+          onPageChange={setPage}
+        />
+      </div>
+    </div>
+  );
+};
 
 export default SearchPage;
