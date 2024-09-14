@@ -6,7 +6,7 @@ type Props={
 }
 const RestaurantInfo=({restaurant}:Props)=>{
     return (
-        <Card className="border-sla">
+        <Card className="border-slate-300 bg-amber-50 p-2">
             <CardHeader>
                 <CardTitle className="text-3xl font-bold tracking-tight">
                     {restaurant.restaurantName}
@@ -15,9 +15,9 @@ const RestaurantInfo=({restaurant}:Props)=>{
                     {restaurant.city},{restaurant.state}
                 </CardDescription>
             </CardHeader>
-            <CardContent className="flex">
+            <CardContent className="flex ">
                 {restaurant.cuisines.map((item,index)=>(
-                    <span className="flex">
+                    <span className="flex text-slate-500">
                         <span>{item}</span>
                         {index < restaurant.cuisines.length-1 && <Dot/>}
                     </span>
