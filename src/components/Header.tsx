@@ -6,7 +6,7 @@ import MainNav from "./MainNav";
 
 const Header=()=>{
     return(
-        <div className="border-b-2 border-b-orange-500 py-6 ">
+        <div className="border-b-2 border-b-red-500 py-6">
             <div className="container mx-auto flex justify-between items-center">
                 <div className="flex items-center gap-3">
                     <Link to="/">
@@ -14,7 +14,7 @@ const Header=()=>{
                     </Link>
                     
                     <Link  to="/" 
-                        className="text-4xl font-bold tracking-tight text-orange-500 h-10%">
+                        className="text-4xl font-bold tracking-tight text-red-600 h-10% ">
                          MunchIt.com    
                     </Link>
                 </div>
