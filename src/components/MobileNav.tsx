@@ -14,7 +14,7 @@ const MobileNav=()=>{
             <SheetContent className="space-y-3">
                 <SheetTitle>
                     {isAuthenticated ?(<span className="flex items-center font-bold gap-2">
-                        <CircleUserRound className="text-orange-500"/>
+                        <CircleUserRound className="text-red-500"/>
                         {user?.email}
                     </span>):(
                          <span>Welcome to Munchit.com!</span>
@@ -25,7 +25,7 @@ const MobileNav=()=>{
                 <SheetDescription className="flex flex-col gap-4">
                     {isAuthenticated ?(<MobileNavLinks/>):(
                         <Button onClick={()=>loginWithRedirect()}
-                        className="flex-1 font-bold bg-orange-500">
+                        className="flex-1 font-bold bg-red-500">
                         Log In
                     </Button>
                     )}   
