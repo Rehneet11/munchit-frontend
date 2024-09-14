@@ -8,7 +8,7 @@ type Props={
 
 const MenuItem =({menuItem,addToCart}:Props)=>{
     return(
-        <Card className='cursor-pointer'>
+        <Card className='cursor-pointer bg-red-50 border-red-200'>
             <CardHeader>
                 <CardTitle>
                     {menuItem.name}
@@ -17,7 +17,7 @@ const MenuItem =({menuItem,addToCart}:Props)=>{
             <CardContent className='font-bold flex justify-between'>
                 <span>{(menuItem.price)}₹</span>
                 <span>
-                    <Button onClick={addToCart} className='bg-amber-400 rounded-lg'> Add To Cart</Button>
+                    <Button onClick={addToCart} className='bg-red-400 rounded-lg'> Add To Cart</Button>
                 </span>
             </CardContent>
         </Card>
