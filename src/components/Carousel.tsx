@@ -1,5 +1,5 @@
 import { useState } from "react";
-
+import { ChevronRightCircle,ChevronLeftCircle } from "lucide-react";
 interface Feature {
   title: string;
   description: string;
@@ -46,7 +46,7 @@ const Carousel = () => {
   };
 
   return (
-    <div className="carousel-container mx-auto max-w-full md:max-w-2xl p-4 md:p-8 text-center bg-gradient-to-r from-blue-500 to-purple-500 shadow-xl rounded-lg relative">
+    <div className="carousel-container mx-auto max-w-full md:max-w-2xl p-4 md:p-8 text-center bg-gradient-to-r from-yellow-600 to-red-500 shadow-xl rounded-lg relative">
       <div className="overflow-hidden relative">
         <div
           className="transition-transform transform duration-500 ease-in-out w-full flex"
@@ -71,13 +71,13 @@ const Carousel = () => {
           className="bg-white bg-opacity-30 hover:bg-opacity-50 transition-all duration-300 text-white text-2xl font-bold p-3 md:p-4 rounded-full shadow-lg"
           onClick={prevSlide}
         >
-          ◀
+          <ChevronLeftCircle/>
         </button>
         <button
           className="bg-white bg-opacity-30 hover:bg-opacity-50 transition-all duration-300 text-white text-2xl font-bold p-3 md:p-4 rounded-full shadow-lg"
           onClick={nextSlide}
         >
-          ▶
+          <ChevronRightCircle/>
         </button>
       </div>
 
