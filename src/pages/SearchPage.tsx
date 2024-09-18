@@ -2,7 +2,7 @@ import { useSearchRestaurants } from "@/api/RestaurantApi";
 import SearchBar from "@/components/SearchBar";
 import SearchResultCard from "@/components/SearchResultCard";
 import SearchResultInfo from "@/components/SearchResultInfo";
-import { useState, useMemo, useCallback } from "react";
+import { useState} from "react";
 import { useParams } from "react-router-dom";
 import { SearchForm } from "@/components/SearchBar";
 import PaginationSelector from "@/components/PaginationSelector";
