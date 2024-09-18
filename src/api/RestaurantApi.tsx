@@ -17,50 +17,26 @@ export const useGetRestaurant = (restaurantId?: string) => {
     return response.json();
   };
 
-  const { data: restaurant, isLoading, error, isError } = useQuery(
-    ["fetchRestaurant", restaurantId], // Cache key includes restaurantId
+  const { data: restaurant, isLoading } = useQuery(
+    "fetchRestaurant",
     getRestaurantByIdRequest,
     {
-      enabled: !!restaurantId,  // Only query if restaurantId exists
-      staleTime: 5 * 60 * 1000, // 5 minutes cache
-      retry: 2, // Retry 2 times before failing
+      enabled: !!restaurantId,
     }
   );
 
-  return { restaurant, isLoading, error, isError };
+  return { restaurant, isLoading };
 };
 
 export const useSearchRestaurants = (
   searchState: SearchState,
   city?: string
 ) => {
-  // Fetch popular or default restaurants on initial load (before any search query)
-  const fetchDefaultRestaurants = async (): Promise<RestaurantSearchResponse> => {
-    const response = await fetch(
-      `${API_BASE_URL}/api/restaurant/search/${city}?page=1&sortOption=bestMatch`
-    );
-
-    if (!response.ok) {
-      throw new Error("Failed to get default restaurants");
-    }
-
-    return response.json();
-  };
-
-  // Fetch restaurants based on the search query
   const createSearchRequest = async (): Promise<RestaurantSearchResponse> => {
     const params = new URLSearchParams();
-
-    if (searchState.searchQuery) {
-      params.set("searchQuery", searchState.searchQuery);
-    }
-
+    params.set("searchQuery", searchState.searchQuery);
     params.set("page", searchState.page.toString());
-
-    if (searchState.selectedCuisines.length > 0) {
-      params.set("selectedCuisines", searchState.selectedCuisines.join(","));
-    }
-
+    params.set("selectedCuisines", searchState.selectedCuisines.join(","));
     params.set("sortOption", searchState.sortOption);
 
     const response = await fetch(
@@ -68,39 +44,20 @@ export const useSearchRestaurants = (
     );
 
     if (!response.ok) {
-      throw new Error("Failed to get restaurant search results");
+      throw new Error("Failed to get restaurant");
     }
 
     return response.json();
   };
 
-  // Use `react-query` to fetch default restaurants on initial page load
-  const { data: defaultResults, isLoading: isDefaultLoading, error: defaultError } = useQuery(
-  ["fetchDefaultRestaurants", city],
-  fetchDefaultRestaurants,
-  {
-    enabled: Boolean(city), // Use Boolean() to ensure it's a boolean value
-    staleTime: 10 * 60 * 1000, // Cache results for 10 minutes
-    retry: 1, // Retry once before throwing error
-    refetchOnWindowFocus: false, // Avoid refetching on window focus
-  }
-);
-
-const { data: results, isLoading: isSearchLoading, error: searchError } = useQuery(
-  ["searchRestaurants", searchState, city], // Include city and searchState in the cache key
-  createSearchRequest,
-  {
-    enabled: Boolean(city && (searchState.searchQuery || searchState.selectedCuisines.length > 0)), // Ensure it's boolean
-    staleTime: 10 * 60 * 1000, // Cache results for 10 minutes
-    retry: 1, // Retry once before throwing error
-    refetchOnWindowFocus: false, // Avoid refetching on window focus
-  }
-);
+  const { data: results, isLoading } = useQuery(
+    ["searchRestaurants", searchState],
+    createSearchRequest,
+    { enabled: !!city }
+  );
 
   return {
-    // Use default results if no search is active
-    results: results || defaultResults,
-    isLoading: isSearchLoading || isDefaultLoading,
-    error: searchError || defaultError,
+    results,
+    isLoading,
   };
 };
