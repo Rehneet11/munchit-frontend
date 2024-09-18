@@ -8,7 +8,6 @@ import { SearchForm } from "@/components/SearchBar";
 import PaginationSelector from "@/components/PaginationSelector";
 import CuisineFilter from "@/components/CuisineFilter";
 import SortOptionDropdown from "@/components/SortOptionDropdown";
-import debounce from "debounce";  // Import debounce
 
 export type SearchState = {
   searchQuery: string;
@@ -28,83 +27,72 @@ const SearchPage = () => {
 
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
 
-  // Memoize API results to avoid refetching on unnecessary re-renders
   const { results, isLoading } = useSearchRestaurants(searchState, city);
 
-  // Debounce search query to limit API calls while typing
-  const debouncedSetSearchQuery = useCallback(
-    debounce((query: string) => {
-      setSearchState((prevState) => ({
-        ...prevState,
-        searchQuery: query,
-        page: 1,
-      }));
-    }, 300), [] // 300ms delay
-  );
-
-  const setSortOption = useCallback((sortOption: string) => {
+  const setSortOption = (sortOption: string) => {
     setSearchState((prevState) => ({
       ...prevState,
       sortOption,
       page: 1,
     }));
-  }, []);
+  };
 
-  const setPage = useCallback((page: number) => {
-    setSearchState((prevState) => ({
-      ...prevState,
-      page,
-    }));
-  }, []);
-
-  const setSelectedCuisines = useCallback((selectedCuisines: string[]) => {
+  const setSelectedCuisines = (selectedCuisines: string[]) => {
     setSearchState((prevState) => ({
       ...prevState,
       selectedCuisines,
       page: 1,
     }));
-  }, []);
-
-  const setSearchQuery = (searchFormData: SearchForm) => {
-    debouncedSetSearchQuery(searchFormData.searchQuery);
   };
 
-  const resetSearch = useCallback(() => {
+  const setPage = (page: number) => {
+    setSearchState((prevState) => ({
+      ...prevState,
+      page,
+    }));
+  };
+
+  const setSearchQuery = (searchFormData: SearchForm) => {
+    setSearchState((prevState) => ({
+      ...prevState,
+      searchQuery: searchFormData.searchQuery,
+      page: 1,
+    }));
+  };
+
+  const resetSearch = () => {
     setSearchState((prevState) => ({
       ...prevState,
       searchQuery: "",
       page: 1,
     }));
-  }, []);
-
-  // Memoize the JSX for child components that don't change frequently
-  const cuisineFilterMemo = useMemo(() => (
-    <CuisineFilter
-      selectedCuisines={searchState.selectedCuisines}
-      onChange={setSelectedCuisines}
-      isExpanded={isExpanded}
-      onExpandedClick={() => setIsExpanded((prevIsExpanded) => !prevIsExpanded)}
-    />
-  ), [searchState.selectedCuisines, isExpanded]);
+  };
 
   if (isLoading) {
-    return <span>Loading...</span>;
+    <span>Loading ...</span>;
   }
 
   if (!results?.data || !city) {
-    return <span>Loading</span>;
+    return <span>No results found</span>;
   }
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-[250px_1fr] gap-5">
-      <div id="cuisines-List">
-        {cuisineFilterMemo}
+      <div id="cuisines-list">
+        <CuisineFilter
+          selectedCuisines={searchState.selectedCuisines}
+          onChange={setSelectedCuisines}
+          isExpanded={isExpanded}
+          onExpandedClick={() =>
+            setIsExpanded((prevIsExpanded) => !prevIsExpanded)
+          }
+        />
       </div>
       <div id="main-content" className="flex flex-col gap-5">
         <SearchBar
           searchQuery={searchState.searchQuery}
           onSubmit={setSearchQuery}
-          placeHolder="Search by cuisine or Restaurant Name"
+          placeHolder="Search by Cuisine or Restaurant Name"
           onReset={resetSearch}
         />
         <div className="flex justify-between flex-col gap-3 lg:flex-row">
@@ -114,8 +102,9 @@ const SearchPage = () => {
             onChange={(value) => setSortOption(value)}
           />
         </div>
+
         {results.data.map((restaurant) => (
-          <SearchResultCard key={restaurant._id} restaurant={restaurant} />
+          <SearchResultCard restaurant={restaurant} />
         ))}
         <PaginationSelector
           page={results.pagination.page}
@@ -128,4 +117,3 @@ const SearchPage = () => {
 };
 
 export default SearchPage;
-
